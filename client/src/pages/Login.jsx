@@ -9,8 +9,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from "@/features/api/authApi";
+
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+
 
 const Login = () => {
   const [loginInput, setLoginInput] = useState({
@@ -22,6 +30,25 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const [
+    registerUser,
+    {
+      data: registerData,
+      error: registerError,
+      isLoading: registerIsLoading,
+      isSuccess: registerIsSuccess,
+    },
+  ] = useRegisterUserMutation();
+  const [
+    loginUser,
+    {
+      data: loginData,
+      error: loginError,
+      isLoading: loginIsLoading,
+      isSuccess: loginIsSuccess,
+    },
+  ] = useLoginUserMutation();
   const changeInputHandler = (e, type) => {
     const { name, value } = e.target;
     if (type === "signup") {
@@ -30,14 +57,34 @@ const Login = () => {
       setLoginInput({ ...loginInput, [name]: value });
     }
   };
-  const handleReg = (type)=>{
+  const handleReg = async (type) => {
     const inputData = type === "signup" ? signupInput : loginInput;
-    console.log(inputData);
+    const action = type === "signup" ? registerUser : loginUser;
+    await action(inputData);
+  };
 
-    
-  }
+  useEffect(() => {
+    if(registerIsSuccess && registerData){
+      toast.success(registerData.message || "Signup successful")
+    }
+    if(registerError){
+      toast.error(registerData.data.message || "Signup Failed")
+    }
+    if(loginIsSuccess && loginData){
+      toast.success(loginData.message || "Login successful")
+    }
+    if(loginError){
+      toast.error(loginData.data.message || "Login Failed")
+    }
+  }, [
+    loginIsLoading,
+    registerIsLoading,
+    loginData,
+    registerData,
+    loginError,
+    registerError,
+  ]);
 
-  
   return (
     <div className="flex items-center w-full justify-center">
       <Tabs defaultValue="login" className="w-[400px]">
@@ -57,7 +104,7 @@ const Login = () => {
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  onChange={(e)=>changeInputHandler(e,"login")}
+                  onChange={(e) => changeInputHandler(e, "login")}
                   type="email"
                   name="email"
                   value={loginInput.email}
@@ -68,7 +115,7 @@ const Login = () => {
               <div className="space-y-1">
                 <Label htmlFor="password">Password</Label>
                 <Input
-                  onChange={(e)=>changeInputHandler(e,"login")}
+                  onChange={(e) => changeInputHandler(e, "login")}
                   name="password"
                   type="password"
                   value={loginInput.password}
@@ -78,7 +125,19 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={(()=>handleReg("login"))}>Login</Button>
+              <Button
+                disable={loginIsLoading}
+                onClick={() => handleReg("login")}
+              >
+                {loginIsLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                    wait
+                  </>
+                ) : (
+                  "Login"
+                )}
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -94,7 +153,7 @@ const Login = () => {
               <div className="space-y-1">
                 <Label htmlFor="name">Name</Label>
                 <Input
-                  onChange={(e)=>changeInputHandler(e,"signup")}
+                  onChange={(e) => changeInputHandler(e, "signup")}
                   name="name"
                   type="text"
                   value={signupInput.name}
@@ -105,7 +164,7 @@ const Login = () => {
               <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  onChange={(e)=>changeInputHandler(e,"signup")}
+                  onChange={(e) => changeInputHandler(e, "signup")}
                   name="email"
                   type="email"
                   value={signupInput.email}
@@ -116,7 +175,7 @@ const Login = () => {
               <div className="space-y-1">
                 <Label htmlFor="password">Password</Label>
                 <Input
-                  onChange={(e)=>changeInputHandler(e,"signup")}
+                  onChange={(e) => changeInputHandler(e, "signup")}
                   name="password"
                   type="password"
                   value={signupInput.password}
@@ -126,7 +185,19 @@ const Login = () => {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={(()=>handleReg("signup"))}>Signup</Button>
+              <Button
+                disable={registerIsLoading}
+                onClick={() => handleReg("signup")}
+              >
+                {registerIsLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                    wait
+                  </>
+                ) : (
+                  "Signup"
+                )}
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>
