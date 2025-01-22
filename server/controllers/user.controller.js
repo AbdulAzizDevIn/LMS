@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../utils/generateToken.js";
+import { deleteMediaFromCloudinary, uploadMedia } from "../utils/cloudinary.js";
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -74,7 +75,7 @@ export const login = async (req, res) => {
 
 export const logout = async (_, res) => {
   try {
-    return res.status(200).cookie("token", "", { maxAge }).json({
+    return res.status(200).cookie("token", "", { maxAge:0 }).json({
       message: "Logged out successfully",
       success: true,
     });
@@ -106,6 +107,48 @@ export const getUserProfile = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to load user",
+    });
+  }
+};
+
+export const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.id;
+    const { name } = req.body;
+    const profilePhoto = req.file;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    //extract the public id of the image from the photoURL
+    if (user.photoURL) {
+      const publicId = user.photoURL.split("/").pop().split(".")[0];
+      await deleteMediaFromCloudinary(publicId);
+    }
+    //upload the new image to cloudinary
+    const cloudResponse = await uploadMedia(profilePhoto.path);
+
+    const photoURL = cloudResponse.secure_url;
+
+    const updatedData = { name, photoURL };
+
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
+      new: true,
+    }).select("-password");
+    
+    return res.status(200).json({
+      success: true,
+      updatedUser,
+      message: "Profile updated successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to update profile",
     });
   }
 };

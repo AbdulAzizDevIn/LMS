@@ -21,10 +21,23 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useLogoutUserMutation } from "@/features/api/authApi";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const user = true;
+  const [logoutUser, { data, isSuccess }] = useLogoutUserMutation();
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    await logoutUser();
+  }
+  useEffect(() => {
+    toast.success( "Logged out successfully");
+    navigate("/login");
+  }, [isSuccess])
+
   const role = "instructor";
   return (
     <>
@@ -55,7 +68,7 @@ const Navbar = () => {
                       <Link to="my-learning">My Learning</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem> <Link to="profile">Edit Profile </Link> </DropdownMenuItem>
-                    <DropdownMenuItem>Log out</DropdownMenuItem>
+                    <DropdownMenuItem onClick={logoutHandler}>Log out</DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Dashboard</DropdownMenuItem>
