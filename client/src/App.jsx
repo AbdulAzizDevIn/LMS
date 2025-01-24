@@ -5,6 +5,9 @@ import Navbar from "./components/Navbar";
 import Courses from "./pages/student/Courses";
 import MyLearning from "./pages/student/MyLearning";
 import Profile from "./pages/student/Profile";
+import Sidebar from "./pages/admin/Sidebar";
+import Dashboard from "./pages/admin/Dashboard";
+import CourseTable from "./pages/admin/CourseTable";
 
 const appRouter = createBrowserRouter([
   {
@@ -16,7 +19,7 @@ const appRouter = createBrowserRouter([
         element: (
           <>
             <Hero />
-            <Courses/> 
+            <Courses />
           </>
         ),
       },
@@ -26,12 +29,26 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "my-learning",
-        element: <MyLearning/>
+        element: <MyLearning />,
       },
       {
         path: "profile",
-        element: <Profile/>
-      }
+        element: <Profile />,
+      },
+      {
+        path: "admin",
+        element: <Sidebar />,
+        children:[
+          {
+            path: "dashboard",
+            element:<Dashboard/>
+          },
+          {
+            path:"courses",
+            element:<CourseTable/>
+          }
+        ]
+      },
     ],
   },
 ]);
@@ -39,7 +56,7 @@ const appRouter = createBrowserRouter([
 function App() {
   return (
     <main>
-      <RouterProvider router={appRouter}/>
+      <RouterProvider router={appRouter} />
     </main>
   );
 }

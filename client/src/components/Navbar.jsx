@@ -39,9 +39,10 @@ const Navbar = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success(data?.message || "User log out.");
+
       navigate("/login");
     }
-  }, [isSuccess,]);
+  }, [isSuccess]);
   const role = "instructor";
   return (
     <>
@@ -82,8 +83,12 @@ const Navbar = () => {
                       Log out
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                  {user.role === "instructor" && (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                    </>
+                  )}
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
