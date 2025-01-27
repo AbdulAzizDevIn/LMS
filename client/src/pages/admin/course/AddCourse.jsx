@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-export const AddCourse = () => {
+const AddCourse = () => {
   const [courseTitle, setCourseTitle] = useState("");
   const [category, setCategory] = useState("");
   
@@ -36,7 +36,8 @@ export const AddCourse = () => {
   };
   useEffect(()=>{
     if(isSuccess){
-      toast.success(data?.message || "Course created")
+      toast.success(data?.message || "Course created");
+      navigate("/admin/course")
     }
   },[isSuccess,error])
  
@@ -112,3 +113,4 @@ export const AddCourse = () => {
     </div>
   );
 };
+export default AddCourse;
