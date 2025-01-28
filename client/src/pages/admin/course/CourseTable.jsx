@@ -39,12 +39,16 @@ const CourseTable = () => {
               <TableCell className="font-medium">
                 {course.courseTitle}
               </TableCell>
-              <TableCell>{course?.coursePrice || "NA"}</TableCell>
+              <TableCell className="font-bold">{course?.coursePrice ? <> ₹ {course?.coursePrice} </> :"NA"}</TableCell>
               <TableCell>
                 <Badge>{course.isPublished ? "Published" : "Draft"}</Badge>{" "}
               </TableCell>
               <TableCell className="text-right">
-                <Button size="sm" variant="ghost" onClick={()=> navigate(`${course._id}`)}>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => navigate(`${course._id}`)}
+                >
                   <Edit />
                 </Button>
               </TableCell>
