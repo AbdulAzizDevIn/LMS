@@ -20,7 +20,6 @@ import { toast } from "sonner";
 const AddCourse = () => {
   const [courseTitle, setCourseTitle] = useState("");
   const [category, setCategory] = useState("");
-  
 
   const [createCourse, { data, error, isSuccess, isLoading }] =
     useCreateCourseMutation();
@@ -34,25 +33,24 @@ const AddCourse = () => {
   const createCourseHandler = async () => {
     await createCourse({ courseTitle, category });
   };
-  useEffect(()=>{
-    if(isSuccess){
+  useEffect(() => {
+    if (isSuccess) {
       toast.success(data?.message || "Course created");
-      navigate("/admin/course")
+      navigate("/admin/course");
     }
-  },[isSuccess,error])
- 
+  }, [isSuccess, error]);
 
   return (
     <div className="flex-1 mx-10">
       <div className="mb-4">
         <h1 className="font-bold text-xl">
-          Lets add course, add some basic course details for your new course
+          Add a New Course: Provide Basic Details for Your Course
         </h1>
         <p className="text-sm">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis id
-          saepe debitis nostrum! Molestiae vero obcaecati, earum saepe
-          laboriosam eum eos quae cumque corporis natus fuga, incidunt atque
-          veritatis sunt.
+          Please fill in the essential details for your new course, including
+          the course title, description, and category etc. This will help you get
+          started with building your course and make it accessible to your
+          students.
         </p>
       </div>
       <div className="space-y-4">

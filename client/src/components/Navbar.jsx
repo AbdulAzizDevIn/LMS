@@ -86,7 +86,7 @@ const Navbar = () => {
                   {user.role === "instructor" && (
                     <>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                      <DropdownMenuItem onClick={()=>navigate("/admin/course")}>Dashboard</DropdownMenuItem>
                     </>
                   )}
                 </DropdownMenuContent>

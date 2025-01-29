@@ -17,10 +17,12 @@ const courseSchema = new mongoose.Schema({
   },
   courseLevel: {
     type: String,
-    enum: ["beginner", "Medium", "Advance"],
+    enum: ["Beginner", "Medium", "Advance"],
   },
   coursePrice: {
     type: Number,
+    default: 0,
+    min:0
   },
   courseThumbnail: {
     type: String,
@@ -47,4 +49,4 @@ const courseSchema = new mongoose.Schema({
   }
 },{timestamps:true});
 
-export const Course = mongoose.model("Course", courseSchema) ;
+export const Course = mongoose.model("Course", courseSchema);

@@ -85,9 +85,11 @@ export const editCourse = async (req, res) => {
       category,
       courseLevel,
       coursePrice,
-      courseThumbnail: courseThumbnail.secure_url,
+      courseThumbnail: courseThumbnail?.secure_url,
     };
-    course = await Course.findByIdAndUpdate(courseId,updateData, { new: true });
+    course = await Course.findByIdAndUpdate(courseId, updateData, {
+      new: true,
+    });
     return res.status(200).json({
       course,
       message: "Course update successfully",
@@ -99,3 +101,26 @@ export const editCourse = async (req, res) => {
     });
   }
 };
+
+export const getCourseById = async (req, res) => {
+  try {
+    const courseId = req.params.courseId;
+    const course = await Course.findById(courseId);
+    if (!course) {
+      res.status(404).json({
+        message: "Course not found",
+      });
+    }
+    return res.status(200).json({
+      message: "Get course successfully",
+      course,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to get course by id",
+    });
+  }
+};
+
+

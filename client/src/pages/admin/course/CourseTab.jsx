@@ -22,7 +22,10 @@ import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { useEditCourseMutation } from "@/features/api/courseApi";
+import {
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+} from "@/features/api/courseApi";
 import { toast } from "sonner";
 
 const CourseTab = () => {
@@ -40,6 +43,27 @@ const CourseTab = () => {
     coursePrice: "",
     courseThumbnail: "",
   });
+
+  const { data: courseByIdData, isLoading: courseByIdloading } =
+    useGetCourseByIdQuery(courseId,{refetchOnMountOrArgChange:true});
+
+
+  useEffect(() => {
+    
+    if (courseByIdData?.course) {
+      const course = courseByIdData?.course;
+      setInput({
+        courseTitle: course.courseTitle,
+        subTitle: course.subTitle,
+        description: course.description,
+        category: course.category,
+        courseLevel: course.courseLevel,
+        coursePrice: course.coursePrice,
+        courseThumbnail: course.courseThumbnail,
+      });
+    }
+  }, [courseByIdData]);
+
   const [previewThumbnail, setPreviewThumbnail] = useState("");
   const changeEventHandler = (e) => {
     const { name, value } = e.target;
@@ -69,20 +93,22 @@ const CourseTab = () => {
     formData.append("description", input.description);
     formData.append("category", input.category);
     formData.append("courseLevel", input.courseLevel);
-    formData.append("coursePrice", input.coursePrice);
+    formData.append("coursePrice", input.coursePrice === '' ? 0 : Number(input.coursePrice));
     formData.append("courseThumbnail", input.courseThumbnail);
 
-    await editCourse({formData,courseId});
+    await editCourse({ formData, courseId });
   };
 
   useEffect(() => {
     if (isSuccess) {
       toast.success(data.message || "Course Update Successfully");
     }
-    if(error){
-      toast.error(error.data.message || "Failed to update course")
+    if (error) {
+      toast.error(error.data.message || "Failed to update course");
     }
-  }, [isSuccess,error]);
+  }, [isSuccess, error]);
+
+  if(courseByIdloading) return <Loader2 className="h-4 w-4 animate-spin"/>
 
   const isPublished = false;
   return (
@@ -138,7 +164,7 @@ const CourseTab = () => {
             <div className="flex items-center gap-5">
               <div>
                 <Label>Category</Label>
-                <Select onValueChange={selectCategory}>
+                <Select value={input.category} onValueChange={selectCategory}>
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
@@ -167,7 +193,10 @@ const CourseTab = () => {
               </div>
               <div>
                 <Label>Course Level</Label>
-                <Select onValueChange={selectCourseLevel}>
+                <Select
+                  value={input.courseLevel}
+                  onValueChange={selectCourseLevel}
+                >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select a course level" />
                   </SelectTrigger>
@@ -201,11 +230,12 @@ const CourseTab = () => {
                 accept="image/*"
                 className="w-fit"
               />
-              {previewThumbnail && (
+              {(previewThumbnail || input.courseThumbnail) && (
                 <img
                   className="w-64 my-2"
-                  src={previewThumbnail}
+                  src={previewThumbnail || input.courseThumbnail}
                   alt="Course Thumbnail"
+                  value={input.courseThumbnail}
                 />
               )}
             </div>
