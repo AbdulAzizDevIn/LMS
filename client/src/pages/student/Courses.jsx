@@ -1,8 +1,15 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import Course from "../student/Course";
+import { useGetPublishedCourseQuery } from "@/features/api/courseApi";
 const Courses = () => {
-  const isLoading = false;
-  const courses = [1, 2, 3, 4, 5, 6, 7, 8];
+  const { data, isLoading, isError } = useGetPublishedCourseQuery();
+  console.log(data?.courses);
+
+  console.log(data?.courses);
+  if (isError) {
+    return <h1>Some error occurred while fetching courses.</h1>;
+  }
+
   return (
     <div className="bg-gray-50">
       <div className="max-w-7xl mx-auto py-12 p-6 ">
@@ -12,7 +19,10 @@ const Courses = () => {
             ? Array.from({ length: 8 }).map((_dirname, index) => (
                 <CourseSkeleton key={index} />
               ))
-            : courses.map((course, index) => <Course key={index}/>)}
+            : data?.courses &&
+              data?.courses.map((course, index) => (
+                <Course key={index} course={course} />
+              ))}
         </div>
       </div>
     </div>
@@ -21,7 +31,7 @@ const Courses = () => {
 
 export default Courses;
 
- export const CourseSkeleton = () => {
+export const CourseSkeleton = () => {
   return (
     <div className="bg-white shadow-md hover:shadow-lg transition-shadow rounded-lg overflow-hidden">
       <Skeleton className="w-full h-36" />
@@ -39,4 +49,3 @@ export default Courses;
     </div>
   );
 };
-

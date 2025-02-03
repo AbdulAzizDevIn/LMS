@@ -185,11 +185,14 @@ const LectureTab = () => {
         {!uploadVideoInfo ? (
           <Loader2 className="h-8 w-8 animate-spin" />
         ) : (
-          <video autoPlay muted controls>
+          <div className="">
+            <video  autoPlay muted controls>
             <source src={uploadVideoInfo?.videoUrl} type="video/mp4" />
             <source src={uploadVideoInfo?.videoUrl} type="video/webm" />
             <source src={uploadVideoInfo?.videoUrl} type="video/ogg" />
           </video>
+          </div>
+          
         )}
 
         {mediaProgress && (
