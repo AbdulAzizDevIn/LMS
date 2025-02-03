@@ -78,9 +78,8 @@ export const editLecture = async (req, res) => {
     if (videoInfo.publicId) {
       lecture.publicId = videoInfo.publicId;
     }
-    if (isPreviewFree) {
-      lecture.isPreviewFree = isPreviewFree;
-    }
+
+    lecture.isPreviewFree = isPreviewFree;
 
     await lecture.save();
 
@@ -119,13 +118,12 @@ export const removeLecture = async (req, res) => {
     //remove lecture from course
     await Course.updateOne(
       { lectures: lectureId }, //find course that has the lecture
-      {$pull:{lectures:lectureId}} //remove lecture from course
+      { $pull: { lectures: lectureId } } //remove lecture from course
     );
 
     return res.status(200).json({
       message: "Lecture removed successfully",
     });
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -136,7 +134,7 @@ export const removeLecture = async (req, res) => {
 
 export const getLectureById = async (req, res) => {
   try {
-    const {lectureId} = req.params;
+    const { lectureId } = req.params;
     const lecture = await Lecture.findById(lectureId);
     res.status(200).json({
       lecture,
@@ -148,4 +146,7 @@ export const getLectureById = async (req, res) => {
       message: "Failed to get lecture by id",
     });
   }
-}
+};
+
+
+

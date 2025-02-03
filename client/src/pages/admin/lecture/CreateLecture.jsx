@@ -14,7 +14,6 @@ import Lecture from "./Lecture";
 
 const CreateLecture = () => {
   const [lectureTitle, setLectureTitle] = useState("");
-  console.log(lectureTitle);
 
   const navigate = useNavigate();
   const params = useParams();
@@ -27,7 +26,7 @@ const CreateLecture = () => {
     data: lectureData,
     isLoading: lectureLoading,
     isError: lectureError,
-    refetch
+    refetch,
   } = useGetCourseLectureQuery(courseId);
 
   const createLectureHandler = async () => {
@@ -35,7 +34,7 @@ const CreateLecture = () => {
   };
   useEffect(() => {
     if (isSuccess) {
-        refetch();
+      refetch();
       toast.success(data.message);
     }
     if (error) {
@@ -92,10 +91,15 @@ const CreateLecture = () => {
             <p>No Lecture Available</p>
           ) : (
             lectureData.lectures.map((lecture, index) => (
-                
-                <>{console.log(lecture)
-                }<Lecture key={lecture._id} lecture={lecture} courseId={courseId}  index={index} /></>
-              
+              <>
+               
+                <Lecture
+                  key={lecture._id}
+                  lecture={lecture}
+                  courseId={courseId}
+                  index={index}
+                />
+              </>
             ))
           )}
         </div>

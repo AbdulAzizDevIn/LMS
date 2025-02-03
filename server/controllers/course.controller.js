@@ -123,4 +123,31 @@ export const getCourseById = async (req, res) => {
   }
 };
 
+// publish unpublished course logic
 
+export const togglePublishCourse = async (req, res) => {
+  try {
+    const courseId = req.params.courseId;
+    const publish = req.query.publish; // true or false value
+    const course = await Course.findById(courseId);
+    if(!course){
+      return res.status(404).json({
+        message: "Course not found",
+      });
+    }
+    // update course publish status
+    course.isPublished = publish === "true";
+    await course.save();
+
+    return res.status(200).json({
+      message: `Course ${publish === "true" ? "published" : "unpublished"} successfully`,
+      course,
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Failed to update course",
+    });
+  }
+};
