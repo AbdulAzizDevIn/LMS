@@ -1,29 +1,37 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const CoursePurchaseSchema = mongoose.Schema({
-    courseId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Course",
-        required:true
+const CoursePurchaseSchema = mongoose.Schema(
+  {
+    courseId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+      required: true,
     },
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    amount:{
-        type:Number,
-        required:true
+    amount: {
+      type: Number,
+      required: true,
     },
-    status:{
-        type:String,
-        enum:["pending","success","failed"],
-        default:"pending"
+    status: {
+      type: String,
+      enum: ["pending", "success", "failed"],
+      default: "pending",
     },
-    paymentId:{
-        type:String,
-        required:true
+    paymentId: {
+      type: String,
+    },
+    razorpayPaymentId:{
+      type:String
     }
-},{timestamps:true});
+  },
+  { timestamps: true }
+);
 
-export const CoursePurchase = mongoose.model("CoursePurchase",CoursePurchaseSchema)
+export const CoursePurchase = mongoose.model(
+  "CoursePurchase",
+  CoursePurchaseSchema
+);

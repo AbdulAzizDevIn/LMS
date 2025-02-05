@@ -1,10 +1,56 @@
+import { useCreateCheckoutSessionMutation } from "@/features/api/purchaseApi";
 import { Button } from "./ui/button";
+import { Loader2 } from "lucide-react";
 
+const BuyCourseButton = ({ courseId }) => {
+  const [createCheckoutSession, { isLoading }] =
+    useCreateCheckoutSessionMutation();
 
-const BuyCourseButton = () => {
+  const purchaseCourseHandler = async () => {
+    const res = await createCheckoutSession({ courseId });
+    console.log(res);
+    const { orderId, amount, currency, key, course, user } = res.data;
+    const options = {
+      key: key,
+      amount: amount,
+      currency: currency,
+      name: course?.courseTitle,
+      description: "Course Purchase",
+      image: course?.courseThumbnail,
+      order_id: orderId,
+      callback_url: "http://localhost:8000/api/v1/purchase/checkout/success",
+      prefill: {
+        name: user?.name,
+        email: user?.email,
+      },
+     
+    };
+    console.log(user);
+    
+
+    const razorpay = new window.Razorpay(options);
+
+    razorpay.open();
+  };
+
   return (
-    <><Button className="w-full">Buy Course</Button></>
-  )
-}
+    <>
+      <Button
+        disabled={isLoading}
+        onClick={purchaseCourseHandler}
+        className="w-full"
+      >
+        {isLoading ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Please wait
+          </>
+        ) : (
+          "Buy Course"
+        )}
+      </Button>
+    </>
+  );
+};
 
 export default BuyCourseButton;
