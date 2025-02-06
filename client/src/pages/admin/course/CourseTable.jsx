@@ -39,9 +39,20 @@ const CourseTable = () => {
               <TableCell className="font-medium">
                 {course.courseTitle}
               </TableCell>
-              <TableCell className="font-bold">{course?.coursePrice ? <> ₹ {course?.coursePrice} </> :"NA"}</TableCell>
+              <TableCell className="font-bold">
+                {course?.coursePrice ? <> ₹ {course?.coursePrice} </> : "NA"}
+              </TableCell>
               <TableCell>
-                <Badge>{course.isPublished ? "Published" : "Draft"}</Badge>{" "}
+                <Badge
+                  variant="outline"
+                  className={
+                    course.isPublished
+                      ? "bg-green-200 text-green-600"
+                      : "bg-gray-200 text-gray-600"
+                  }
+                >
+                  {course.isPublished ? "Published" : "Draft"}
+                </Badge>{" "}
               </TableCell>
               <TableCell className="text-right">
                 <Button

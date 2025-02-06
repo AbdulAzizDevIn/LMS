@@ -100,7 +100,6 @@ export const verifyPayment = async (req, res) => {
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
       .update(body.toString())
       .digest("hex");
-   
 
     // Validate signature
     if (expectedSignature !== razorpay_signature) {
@@ -142,7 +141,9 @@ export const verifyPayment = async (req, res) => {
       }),
     ]);
 
-    res.redirect(`http://localhost:5173/course-progress/${purchase.courseId._id}`);
+    res.redirect(
+      `http://localhost:5173/course-progress/${purchase.courseId._id}`
+    );
   } catch (error) {
     console.error("Verification error:", error);
     res.status(500).json({
@@ -151,3 +152,57 @@ export const verifyPayment = async (req, res) => {
     });
   }
 };
+
+export const getCourseDetailsWithPurchaseStatus = async (req,res) => {
+  try {
+    const { courseId } = req.params;
+    const userId = req.id;
+
+    const course = await Course.findById(courseId)
+      .populate({ path: "creator" })
+      .populate({ path: "lectures" });
+
+    const purchased = await CoursePurchase.findOne({userId, courseId});
+
+    if(!course){
+      return res.status(404).json({
+        message:"Course Not Found!"
+      })
+    }
+
+    return res.status(200).json({
+      course,
+      purchased: purchased ? true : false
+    })
+  } catch (error) {
+    console.error( error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get course and purchase status",
+    });
+  }
+};
+
+export const getAllPurchasedCourse = async (req,res) => {
+  try {
+    const purchasedCourses = await CoursePurchase.find({status:"success"}).populate("courseId");
+
+    if(!purchasedCourses){
+      return res.status(404).json({
+        purchasedCourses:[],
+        message:"purchased course not found"
+      })
+    }
+
+    return res.status(200).json({
+      purchasedCourses,
+      message:"Get purchased course successfully"
+    })
+  } catch (error) {
+    console.error( error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get purchase course",
+    });
+  }
+}
