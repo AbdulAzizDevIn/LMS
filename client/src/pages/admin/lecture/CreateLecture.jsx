@@ -87,10 +87,10 @@ const CreateLecture = () => {
             <p>Loading lecture..</p>
           ) : lectureError ? (
             <p>Failed to load lectures</p>
-          ) : lectureData.lectures.length === 0 ? (
+          ) : lectureData?.lectures.length === 0 ? (
             <p>No Lecture Available</p>
           ) : (
-            lectureData.lectures.map((lecture, index) => (
+            lectureData?.lectures.map((lecture, index) => (
               <>
                
                 <Lecture
