@@ -30,7 +30,7 @@ export const courseApi = createApi({
 
         //append sortByPrice is available
         if(sortByPrice){
-          queryString += `&sortByPrice${encodeURIComponent(sortByPrice)}`
+          queryString += `&sortByPrice=${encodeURIComponent(sortByPrice)}`
         }
 
         return {

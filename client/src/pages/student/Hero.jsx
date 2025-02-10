@@ -37,7 +37,7 @@ const Hero = () => {
             Search
           </Button>
         </form>
-        <Button className="bg-white dark:bg-gray-800 text-blue-600 rounded-full hover:bg-gray-200">
+        <Button onClick={()=>navigate(`/course/search?query`)} className="bg-white dark:bg-gray-800 text-blue-600 rounded-full hover:bg-gray-200">
           Explore Courses
         </Button>
       </div>
