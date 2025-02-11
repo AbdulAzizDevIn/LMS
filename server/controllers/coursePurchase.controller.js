@@ -142,7 +142,7 @@ export const verifyPayment = async (req, res) => {
     ]);
 
     res.redirect(
-      `http://localhost:5173/course-progress/${purchase.courseId._id}`
+      `https://lms-ovvc.onrender.com/course-progress/${purchase.courseId._id}`
     );
   } catch (error) {
     console.error("Verification error:", error);
