@@ -13,7 +13,6 @@ import {
 const Dashboard = () => {
   const { data, isSuccess, isLoading, isError } =
     useGetAllPurchasedCoursesQuery();
-  console.log(data);
 
   if (isLoading) {
     return <h1> Loading...</h1>;

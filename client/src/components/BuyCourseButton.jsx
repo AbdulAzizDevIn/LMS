@@ -25,7 +25,6 @@ const BuyCourseButton = ({ courseId }) => {
       },
      
     };
-    console.log(user);
     
 
     const razorpay = new window.Razorpay(options);

@@ -8,7 +8,6 @@ const router = express.Router();
 router.route("/upload-video").post(upload.single("file"), async (req, res) => {
   try {
     const { lectureId } = req.body;
-    console.log(lectureId);
     
     const videoFile = req.file;
     const lecture = await Lecture.findById(lectureId);
