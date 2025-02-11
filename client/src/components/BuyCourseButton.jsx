@@ -18,7 +18,7 @@ const BuyCourseButton = ({ courseId }) => {
       description: "Course Purchase",
       image: course?.courseThumbnail,
       order_id: orderId,
-      callback_url: "http://localhost:8000/api/v1/purchase/checkout/success",
+      callback_url: "https://lms-ovvc.onrender.com/api/v1/purchase/checkout/success",
       prefill: {
         name: user?.name,
         email: user?.email,
