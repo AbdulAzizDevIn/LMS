@@ -43,7 +43,7 @@ const Navbar = () => {
       navigate("/login");
     }
   }, [isSuccess]);
- 
+
   return (
     <>
       <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-50">
@@ -78,17 +78,37 @@ const Navbar = () => {
                     <Link to="profile">
                       <DropdownMenuItem>Edit Profile</DropdownMenuItem>
                     </Link>
-                    <DropdownMenuItem onClick={logoutHandler}>
-                      Log out
-                    </DropdownMenuItem>
+
+                    <Button
+                      onClick={logoutHandler}
+                      variant="outline"
+                      className="w-full text-left px-4 py-2"
+                    >
+                      <DropdownMenuItem className="cursor-pointer">
+                        Log out
+                      </DropdownMenuItem>
+                    </Button>
                   </DropdownMenuGroup>
                   {user.role === "instructor" && (
-                    <>
+                    <div>
                       <DropdownMenuSeparator />
-                      <Link to={"/admin/dashboard"}>
-                        <DropdownMenuItem>Dashboard</DropdownMenuItem>
-                      </Link>
-                    </>
+                      <DropdownMenuItem>
+                        <Button
+                          onClick={() => navigate("/admin/dashboard")}
+                          className="w-full text-left px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white" // Adjust styles as needed
+                        >
+                          Dashboard
+                        </Button>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Button
+                          onClick={() => navigate("/admin/course")}
+                          className="w-full text-left px-4 py-2  bg-blue-500 hover:bg-blue-400 text-white" // Adjust styles as needed
+                        >
+                          Courses
+                        </Button>
+                      </DropdownMenuItem>
+                    </div>
                   )}
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -105,14 +125,12 @@ const Navbar = () => {
         </div>
         {/*Mobile device*/}
         <div className="flex md:hidden items-center justify-between px-4 h-full">
-          <h1 className="font-extrabold" onClick={() => navigate("/")}>E-Learning</h1>
+          <h1 className="font-extrabold" onClick={() => navigate("/")}>
+            E-Learning
+          </h1>
           <Sheet>
             <SheetTrigger asChild>
-              <Button
-                size="icon"
-                className="rounded-full  "
-                variant="outline"
-              >
+              <Button size="icon" className="rounded-full" variant="outline">
                 <Menu />
               </Button>
             </SheetTrigger>
@@ -121,21 +139,77 @@ const Navbar = () => {
                 <SheetTitle>E-Learning</SheetTitle>
                 <DarkMode />
               </SheetHeader>
-              <nav className="flex flex-col space-y-4">
-                <span>
-                  <Link to="my-learning">My Learning</Link>
-                </span>
-                <span>
-                  <Link to="profile">Edit Profile </Link>
-                </span>
-                <p onClick={logoutHandler}>Log out</p>
-              </nav>
-              {user?.role === "instructor" && (
-                <SheetFooter>
+
+              {user ? (
+                <>
+                  <nav className="flex flex-col space-y-4">
+                    <Button variant="outline">
+                      <Link
+                        to="my-learning"
+                        className="hover:text-blue-500 transition-colors duration-200"
+                      >
+                        My Learning
+                      </Link>
+                    </Button>
+
+                    <Button variant="outline">
+                      <Link
+                        to="profile"
+                        className="hover:text-blue-500 transition-colors duration-200"
+                      >
+                        Edit Profile
+                      </Link>
+                    </Button>
+
+                    <Button
+                      onClick={logoutHandler}
+                      className="hover:text-blue-500 transition-colors duration-200"
+                    >
+                      Log out
+                    </Button>
+                  </nav>
+
+                  {user?.role === "instructor" && (
+                    <SheetFooter className="gap-2 ">
+                      <SheetClose asChild>
+                        <Button
+                          className="w-full text-left px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white"
+                          onClick={() => navigate("/admin/dashboard")}
+                        >
+                          Dashboard
+                        </Button>
+                      </SheetClose>
+                      <SheetClose asChild>
+                        <Button
+                          className="w-full text-left px-4 py-2 bg-blue-500 hover:bg-blue-400 text-white"
+                          onClick={() => navigate("/admin/course")}
+                        >
+                          Course
+                        </Button>
+                      </SheetClose>
+                    </SheetFooter>
+                  )}
+                </>
+              ) : (
+                <nav className="flex flex-col space-y-4 mt-4">
                   <SheetClose asChild>
-                    <Button onClick={()=>navigate("/admin/dashboard")} >Dashboard</Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => navigate("/login")}
+                      className="w-full"
+                    >
+                      Login
+                    </Button>
                   </SheetClose>
-                </SheetFooter>
+                  <SheetClose asChild>
+                    <Button
+                      onClick={() => navigate("/login")}
+                      className="w-full"
+                    >
+                      Signup
+                    </Button>
+                  </SheetClose>
+                </nav>
               )}
             </SheetContent>
           </Sheet>
