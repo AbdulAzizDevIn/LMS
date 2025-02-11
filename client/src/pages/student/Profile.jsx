@@ -64,6 +64,7 @@ const Profile = () => {
     console.log("FormData:", formData.get("profilePhoto"));
     await updateUser(formData);
   };
+console.log(user.name);
 
   return (
     <div className="max-w-4xl mx-auto px-4 my-24">

@@ -43,10 +43,10 @@ const Navbar = () => {
       navigate("/login");
     }
   }, [isSuccess]);
-  const role = "instructor";
+ 
   return (
     <>
-      <div className="h-16 dark:bg-[#0A0A0A] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-50">
+      <div className="h-16 dark:bg-[#020817] bg-white border-b dark:border-b-gray-800 border-b-gray-200 fixed top-0 left-0 right-0 duration-300 z-50">
         {/*Desktop*/}
         <div className="max-w-7xl mx-auto hidden md:flex justify-between items-center gap-10 h-full">
           <div
@@ -72,13 +72,12 @@ const Navbar = () => {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <Link to="my-learning">My Learning</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      {" "}
-                      <Link to="profile">Edit Profile </Link>{" "}
-                    </DropdownMenuItem>
+                    <Link to="my-learning">
+                      <DropdownMenuItem>My Learning</DropdownMenuItem>
+                    </Link>
+                    <Link to="profile">
+                      <DropdownMenuItem>Edit Profile</DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem onClick={logoutHandler}>
                       Log out
                     </DropdownMenuItem>
@@ -86,7 +85,9 @@ const Navbar = () => {
                   {user.role === "instructor" && (
                     <>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={()=>navigate("/admin/course")}>Dashboard</DropdownMenuItem>
+                      <Link to={"/admin/dashboard"}>
+                        <DropdownMenuItem>Dashboard</DropdownMenuItem>
+                      </Link>
                     </>
                   )}
                 </DropdownMenuContent>
@@ -104,12 +105,12 @@ const Navbar = () => {
         </div>
         {/*Mobile device*/}
         <div className="flex md:hidden items-center justify-between px-4 h-full">
-          <h1 className="font-extrabold">E-Learning</h1>
+          <h1 className="font-extrabold" onClick={() => navigate("/")}>E-Learning</h1>
           <Sheet>
             <SheetTrigger asChild>
               <Button
                 size="icon"
-                className="rounded-full bg-gray-200 hover:bg-gray-200"
+                className="rounded-full  "
                 variant="outline"
               >
                 <Menu />
@@ -127,12 +128,12 @@ const Navbar = () => {
                 <span>
                   <Link to="profile">Edit Profile </Link>
                 </span>
-                <p>Log out</p>
+                <p onClick={logoutHandler}>Log out</p>
               </nav>
-              {role === "instructor" && (
+              {user?.role === "instructor" && (
                 <SheetFooter>
                   <SheetClose asChild>
-                    <Button type="submit">Dashboard</Button>
+                    <Button onClick={()=>navigate("/admin/dashboard")} >Dashboard</Button>
                   </SheetClose>
                 </SheetFooter>
               )}

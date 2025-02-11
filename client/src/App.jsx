@@ -15,6 +15,13 @@ import EditLecture from "./pages/admin/lecture/EditLecture";
 import CourseDetails from "./pages/student/CourseDetails";
 import CourseProgress from "./pages/student/CourseProgress";
 import SearchPage from "./pages/student/SearchPage";
+import {
+  AdminRoute,
+  AuthenticatedUser,
+  ProtectedRoutes,
+} from "./components/ProtectedRoutes";
+import { PurchaseCourseProtectedRoute } from "./components/PurchaseCourseProtectedRoute";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const appRouter = createBrowserRouter([
   {
@@ -32,31 +39,57 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "login",
-        element: <Login />,
+        element: (
+          <AuthenticatedUser>
+            <Login />
+          </AuthenticatedUser>
+        ),
       },
       {
         path: "my-learning",
-        element: <MyLearning />,
+        element: (
+          <ProtectedRoutes>
+            <MyLearning />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: (
+          <ProtectedRoutes>
+            <Profile />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "course/search",
-        element: <SearchPage/>,
+        element: <SearchPage />,
       },
       {
         path: "course-details/:courseId",
-        element: <CourseDetails />,
+        element: (
+          <ProtectedRoutes>
+            <CourseDetails />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "course-progress/:courseId",
-        element: <CourseProgress />,
+        element: (
+          <PurchaseCourseProtectedRoute>
+            <ProtectedRoutes>
+              <CourseProgress />
+            </ProtectedRoutes>
+          </PurchaseCourseProtectedRoute>
+        ),
       },
       {
         path: "admin",
-        element: <Sidebar />,
+        element: (
+          <AdminRoute>
+            <Sidebar />
+          </AdminRoute>
+        ),
         children: [
           {
             path: "dashboard",
@@ -80,7 +113,7 @@ const appRouter = createBrowserRouter([
           },
           {
             path: "course/:courseId/lecture/:lectureId",
-            element: <EditLecture/>,
+            element: <EditLecture />,
           },
         ],
       },
@@ -91,7 +124,9 @@ const appRouter = createBrowserRouter([
 function App() {
   return (
     <main>
-      <RouterProvider router={appRouter} />
+      <ThemeProvider>
+        <RouterProvider router={appRouter} />
+      </ThemeProvider>
     </main>
   );
 }

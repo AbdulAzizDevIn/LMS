@@ -75,7 +75,7 @@ export const login = async (req, res) => {
 
 export const logout = async (_, res) => {
   try {
-    return res.status(200).cookie("token", "", { maxAge:0 }).json({
+    return res.status(200).cookie("token", "", { maxAge: 0 }).json({
       message: "Logged out successfully",
       success: true,
     });
@@ -91,7 +91,16 @@ export const logout = async (_, res) => {
 export const getUserProfile = async (req, res) => {
   try {
     const userId = req.id;
-    const user = await User.findById(userId).select("-password");
+    const user = await User.findById(userId)
+      .select("-password")
+      .populate({
+        path: "enrolledCourses",
+        populate: {
+          path: "creator",
+          select: "name photoURL", // Select only needed fields
+        },
+      });
+      
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -138,7 +147,7 @@ export const updateUserProfile = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(userId, updatedData, {
       new: true,
     }).select("-password");
-    
+
     return res.status(200).json({
       success: true,
       updatedUser,
