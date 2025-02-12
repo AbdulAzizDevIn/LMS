@@ -1,4 +1,4 @@
-import { Menu, School } from "lucide-react";
+import { GraduationCap, Menu, School } from "lucide-react";
 import { Button } from "./ui/button";
 
 import {
@@ -53,9 +53,9 @@ const Navbar = () => {
             className="flex items-center gap-2 hover:cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <School size={30} />
+            <GraduationCap size={30} />
             <h1 className="hidden md:block font-extrabold text-2xl">
-              E-Learning
+            E-Learning
             </h1>
           </div>
           {/*User icon and dark mode icon*/}
