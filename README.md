@@ -2,6 +2,10 @@
 
 **Live Demo:** https://lms-ovvc.onrender.com/
 
+## Demo Credentials
+**Email:** Admin@gmail.com  
+**Password:** Admin@123
+
 A comprehensive Learning Management System built with modern web technologies to streamline course registration, profile management, and content administration. This project focuses on secure transactions, efficient data fetching, and an intuitive user experience.
 
 ---
